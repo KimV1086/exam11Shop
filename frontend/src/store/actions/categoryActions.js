@@ -8,7 +8,9 @@ export const fetchCategoriesSuccess = categories => ({type: FETCH_CATEGORIES_SUC
 export const fetchCategories = () => {
   return dispatch => {
     return axios.get('/categories').then(
-      response => dispatch(fetchCategoriesSuccess(response.data))
+      response => {
+        dispatch(fetchCategoriesSuccess(response.data))
+      }
     );
   };
 };

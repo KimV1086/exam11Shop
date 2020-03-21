@@ -4,7 +4,11 @@ import {NotificationManager} from 'react-notifications';
 
 export const FETCH_ITEMS_SUCCESS = 'FETCH_ITEMS_SUCCESS';
 export const FETCH_ITEMS_FAILURE = "FETCH_ITEMS_FAILURE";
+
 export const FETCH_ITEMS_ID_SUCCESS = "FETCH_ITEMS_ID_SUCCESS";
+
+export const DELETE = "DELETE";
+
 export const SEND_ITEM_SUCCESS = 'SEND_ITEM_SUCCESS';
 export const SEND_ITEM_FAILURE = "SEND_ITEM_FAILURE";
 
@@ -18,28 +22,62 @@ const sendItemsFailure = error => ({type: SEND_ITEM_FAILURE, error});
 
 const fetchItemsIdSuccess = data => ({type: FETCH_ITEMS_ID_SUCCESS, data});
 
-export const fetchItems = () => {
+export const fetchItems = (id) => {
   return dispatch => {
-    return axios.get('/items').then(
-      response => {
-        dispatch(fetchItemsSuccess(response.data));
-      },
-      error => {
-        dispatch(fetchItemsFailure(error));
-      }
-    );
+    if(id) {
+      return axios.get('/items/?category=' + id).then(
+        response => {
+          dispatch(fetchItemsSuccess(response.data));
+        },
+        error => {
+          dispatch(fetchItemsFailure(error));
+        }
+      );
+    } else {
+      return axios.get('/items').then(
+        response => {
+          dispatch(fetchItemsSuccess(response.data));
+        },
+        error => {
+          dispatch(fetchItemsFailure(error));
+        }
+      );
+    }
   };
 };
 
 export const fetchItemsId = id => {
   return dispatch => {
     return axios.get('/items/' + id).then(
-      response => dispatch(fetchItemsIdSuccess(response.data)),
-      error => dispatch(fetchItemsFailure(error))
+      response => {
+        dispatch(fetchItemsIdSuccess(response.data))
+      },
+      error => {
+        dispatch(fetchItemsFailure(error))
+      }
     );
-  };
+  }
 };
 
+export const fetchDelete = (id) => {
+  return (dispatch, getState) => {
+    const user = getState().user.user;
+    console.log(getState())
+    if(!user) {
+      dispatch(push('/login'))
+    } else {
+      const header = {headers: {'Authorization': user.token}};
+      return axios.delete('/items/' + id, header).then(
+        (response) => {
+          console.log(response);
+          dispatch({type: DELETE})
+        },
+        error => {dispatch(fetchItemsFailure(error))}
+      )
+    }
+
+  }
+};
 
 export const sendItem = itemData => {
   return (dispatch, getState) => {

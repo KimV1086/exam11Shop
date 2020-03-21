@@ -1,9 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from "react-redux";
 
-import {fetchItemsId} from "../../store/actions/itemActions";
+import {fetchItemsId, fetchDelete} from "../../store/actions/itemActions";
 
-import PostByIdItem from "../../components/PostByIdItem/PostByIdItem";
+import OneItemById from "../../components/OneItemById/OneItemById";
 
 class ItemById extends Component {
   componentDidMount() {
@@ -11,14 +11,21 @@ class ItemById extends Component {
     this.props.fetchItemsId(id);
   }
 
+  delete = (id) => {
+    this.props.fetchDelete(id);
+  };
+
   render() {
     let item = null;
     if (this.props.itemId && this.props.itemId.user) {
-      item = <PostByIdItem
+      item = <OneItemById
         image={this.props.itemId.image}
-        user={this.props.itemId.user.username}
-        description={this.props.itemId.description}
         title={this.props.itemId.title}
+        description={this.props.itemId.description}
+        category={this.props.itemId.category.title}
+        phone={this.props.itemId.user.phoneNumber}
+        user={this.props.itemId.user.displayName}
+        delete={() => this.delete(this.props.itemId._id)}
       />;
     } else {
       item = <p>Loading</p>;
@@ -41,7 +48,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchItemsId: id => dispatch(fetchItemsId(id))
+    fetchItemsId: id => dispatch(fetchItemsId(id)),
+    fetchDelete: id => dispatch(fetchDelete(id))
   }
 };
 

@@ -1,13 +1,17 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from "react-redux";
+import {Link} from "react-router-dom";
 import {fetchItems} from "../../store/actions/itemActions";
+import {fetchCategories} from "../../store/actions/categoryActions"
 
 import Items from "../../components/Items/Items";
+import Category from "../../components/Category/Category";
 
 
 class ItemsBuilder extends Component {
   componentDidMount() {
     this.props.fetchItems();
+    this.props.fetchCategories();
   }
 
   getItem = id => {
@@ -16,10 +20,28 @@ class ItemsBuilder extends Component {
     })
   };
 
+  getCategory = (id) => {
+    this.props.fetchItems(id);
+  };
+
+  fetchAllItems = () => {
+    this.props.fetchItems();
+  };
+
   render() {
     return (
       <Fragment>
-        <h1>All items</h1>
+        <h2>Categories</h2>
+        <Link to={'/'}>
+          <h5 onClick={this.fetchAllItems}>All items</h5>
+        </Link>
+        {this.props.categories.map(category => (
+          <Category
+            key={category._id}
+            category={category.title}
+            onClick={() => this.getCategory(category._id)}/>
+        ))}
+        <h2>All items</h2>
         {this.props.items.map(item => (
           <Items
             key={item._id}
@@ -35,13 +57,15 @@ class ItemsBuilder extends Component {
 
 const mapStateToProps = state => {
   return {
-    items: state.item.items
+    items: state.item.items,
+    categories: state.category.categories
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchItems: () => dispatch(fetchItems())
+    fetchItems: id => dispatch(fetchItems(id)),
+    fetchCategories: () => dispatch(fetchCategories())
   }
 };
 

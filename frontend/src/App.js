@@ -31,8 +31,8 @@ class App extends Component {
             <Route path="/" exact component={ItemsBuilder}/>
             <Route path="/register" exact component={Register}/>
             <Route path="/login" exact component={Login}/>
-            <Route path="/posts/new" exact component={NewItem}/>
-            <Route path="/posts/:id" component={ItemById}/>
+            <Route path="/items/new" exact component={NewItem}/>
+            <Route path="/items/:id" component={ItemById}/>
 
           </Switch>
         </Container>
