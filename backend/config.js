@@ -8,6 +8,7 @@ module.exports = {
   dbURL: 'mongodb://localhost/market',
   mongoOptions: {
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true
   }
 };
