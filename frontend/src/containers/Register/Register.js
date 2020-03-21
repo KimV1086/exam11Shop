@@ -62,7 +62,7 @@ class Register extends Component {
           <FormElement
             propertyName="displayName"
             title="Display name"
-            type="displayName"
+            type="text"
             value={this.state.displayName}
             onChange={this.inputChangeHandler}
             error={this.fieldHasError('displayName')}
@@ -72,7 +72,7 @@ class Register extends Component {
           <FormElement
             propertyName="phoneNumber"
             title="Phone number"
-            type="phoneNumber"
+            type="text"
             value={this.state.phoneNumber}
             onChange={this.inputChangeHandler}
             error={this.fieldHasError('phoneNumber')}
